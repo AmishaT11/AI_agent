@@ -1,0 +1,15 @@
+{
+  "must_include": [
+    "import org.junit.jupiter.api.Test",
+    "import io.mockk."
+  ],
+  "should_contain": [
+    "assert",
+    "verify"
+  ],
+  "avoid_patterns": [
+    "Thread.sleep",
+    "print\\(",
+    "System.out.println\\("
+  ]
+}

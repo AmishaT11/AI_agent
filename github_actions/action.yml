@@ -1,0 +1,21 @@
+name: Kotlin Test Review Bot
+description: Automated PR review for JUnit5 & MockK tests.
+
+inputs:
+  github_token:
+    required: true
+
+outputs:
+  review_comment:
+    description: "Generated review comment"
+    value: ${{ steps.analyze.outputs.comment }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Test Review
+      id: analyze
+      run: |
+        python cli/test_checker.py > review_output.txt
+        echo "comment=$(cat review_output.txt)" >> $GITHUB_ENV
+      shell: bash
