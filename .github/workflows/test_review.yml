@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2  # Ensure at least 2 commits are fetched for `git diff`
 
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -20,7 +22,9 @@ jobs:
       - name: Fetch Changed Test Files
         id: get_files
         run: |
-          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep '\.kt$' | tr '\n' ' ')
+          git fetch origin main || git fetch origin master  # Ensure main branch is available
+          BASE_BRANCH=$(git branch -r --list "origin/main" && echo "origin/main" || echo "origin/master")
+          CHANGED_FILES=$(git diff --name-only $BASE_BRANCH...HEAD | grep '\.kt$' | tr '\n' ' ')
           echo "FILES=$CHANGED_FILES" >> $GITHUB_ENV
         shell: bash
 
