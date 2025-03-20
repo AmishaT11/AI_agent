@@ -26,6 +26,14 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
+      - name: Ensure Gradle Wrapper Exists
+        run: |
+          if [ ! -f ./gradlew ]; then
+            echo "Gradle wrapper not found! Initializing Gradle..."
+            gradle wrapper
+          fi
+          chmod +x ./gradlew  # Ensure the Gradle wrapper is executable
+
       - name: Fetch Base Branch
         run: |
           git fetch origin main || git fetch origin master  # Ensure base branch is available
