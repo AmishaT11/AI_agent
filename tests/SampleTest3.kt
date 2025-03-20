@@ -14,18 +14,18 @@ class InvalidSampleTest {
     @Test
     fun missing_assertion_test() {
         val mockService = mockk<Service>()
-        verify { mockService.someMethod() }  // ✅ Uses verify, but no assertion
+        verify { mockService.someMethod() } 
     }
 
     @Test
     fun discouraged_pattern_test() {
-        println("This should not be in a test case!") // ❌ Violates "System.out.println"
+        println("This should not be in a test case!") 
     }
 
     @Test
     fun another_invalid_test() {
-        Thread.sleep(1000) // ❌ Violates "Thread.sleep"
+        Thread.sleep(1000) 
         val value = 3 * 3
-        assertEquals(9, value) // ✅ Correct assertion
+        assertEquals(9, value)
     }
 }
