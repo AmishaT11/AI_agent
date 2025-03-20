@@ -15,7 +15,9 @@ jobs:
       - name: Fetch Changed Test Files
         id: get_files
         run: |
-          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep '\.kt$' | tr '\n' ' ')
+          git fetch origin main || git fetch origin master
+          BASE_BRANCH=$(git branch -r | grep -E 'origin/main|origin/master' | head -n 1 | awk -F'/' '{print $2}')
+          CHANGED_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD | grep '\.kt$' || echo "")
           echo "FILES=$CHANGED_FILES" >> $GITHUB_ENV
         shell: bash
 
