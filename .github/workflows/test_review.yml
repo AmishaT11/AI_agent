@@ -11,19 +11,23 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
         with:
-          fetch-depth: 0  # Ensures full history is fetched for diff comparison
+          python-version: '3.8'
 
       - name: Fetch Changed Test Files
         id: get_files
         run: |
-          git fetch origin main  # Ensure main is fetched
-          CHANGED_FILES=$(git diff --name-only origin/main..HEAD -- '*.kt' | tr '\n' ' ')
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep '\.kt$' | tr '\n' ' ')
           echo "FILES=$CHANGED_FILES" >> $GITHUB_ENV
         shell: bash
 
       - name: Run Test Review
-        run: python cli/test_checker.py $FILES
+        run: |
+          export PYTHONPATH=$PWD
+          python cli/test_checker.py $FILES
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

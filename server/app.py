@@ -1,5 +1,11 @@
+import sys
+import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+
+# Ensure the script can find the 'agent' module
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + "/.."))
+
 from agent.analyzer import analyze_test_file
 
 app = FastAPI()
