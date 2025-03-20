@@ -16,15 +16,6 @@ async def validate_test_file(test_file: TestFile):
     issues = analyze_test_file(test_file.content)
     return {"issues": issues}
 
-@app.post("/validate_llm")
-async def validate_test_file_llm(test_file: TestFile):
-    """API to validate test file using LLM."""
-    if not test_file.content.strip():
-        raise HTTPException(status_code=400, detail="Empty test file provided.")
-
-    issues = analyze_test_file(test_file.content)
-    return {"ai_review": issues}
-
 @app.get("/health")
 async def health_check():
     return {"status": "API is running"}
