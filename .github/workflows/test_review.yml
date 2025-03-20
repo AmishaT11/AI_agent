@@ -11,11 +11,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Ensures full history is fetched for diff comparison
 
       - name: Fetch Changed Test Files
         id: get_files
         run: |
-          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep '\.kt$' | tr '\n' ' ')
+          git fetch origin main  # Ensure main is fetched
+          CHANGED_FILES=$(git diff --name-only origin/main..HEAD -- '*.kt' | tr '\n' ' ')
           echo "FILES=$CHANGED_FILES" >> $GITHUB_ENV
         shell: bash
 
