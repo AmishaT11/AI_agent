@@ -1,5 +1,10 @@
 import os
+import sys
 import requests
+
+# Ensure the script can find the 'agent' module
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + "/.."))
+
 from agent.analyzer import analyze_test_file
 from agent.comment_generator import generate_comment
 
@@ -13,7 +18,7 @@ headers = {
 }
 
 def get_changed_test_files():
-    """Fetch changed Kotlin test files in the PR."""
+    """Fetches changed Kotlin test files in the PR."""
     api_url = f"https://api.github.com/repos/{GITHUB_REPOSITORY}/pulls/{PR_NUMBER}/files"
     response = requests.get(api_url, headers=headers)
 
@@ -25,7 +30,7 @@ def get_changed_test_files():
     return [f["filename"] for f in files if f["filename"].endswith(".kt")]
 
 def post_review_comment(file_path):
-    """Analyze test file with LLM and post a GitHub comment."""
+    """Analyze test file and post a GitHub comment."""
     issues = analyze_test_file(file_path)
     comment = generate_comment(file_path, issues)
 
